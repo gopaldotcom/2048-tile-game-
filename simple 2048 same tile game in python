@@ -1,0 +1,84 @@
+import random
+import copy
+
+def display_board():
+    for row in board:
+        for item in row:
+            print("{:4}".format(item),end="  ")
+        print()
+        print()
+def place_new():
+    if has_free():
+        placed = False
+        while(placed == False):
+            randomRow = random.randint(0,3)
+            randomCol = random.randint(0,3)
+            if board[randomRow][randomCol] == ".":
+                randNum = random.randint(0,10)
+                if randNum < 3:
+                    board[randomRow][randomCol] = "4"
+                else:
+                    board[randomRow][randomCol] = "2"
+                placed = True
+
+def rotate_board():
+    copyBoard = copy.deepcopy(board)
+    for i in range(3,-1,-1):
+        for j in range(3,-1,-1):
+            board[i][j] = copyBoard[j][i]
+    copyBoard = copy.deepcopy(board)
+    for i in range(0,4):
+        board[i] = copyBoard[i][::-1]
+
+def has_free():
+    for row in board:
+        for item in row:
+            if item == "2048":
+                display_board()
+                print("You won!!!")
+                quit()
+    for row in board:
+        for item in row:
+            if (item == "."):
+                return True
+    return False
+
+def possible_move():
+    for row in board:
+        for i in range(0,len(row)-1,1):
+            if row[i] == row[i+1]:
+                return True
+    for i in range(3,0,-1):
+        for j in range(3,-1,-1):
+            if board[i][j] == board[i-1][j]:
+                return True
+    return False
+def shift_left():
+    for row in board:
+        for i in range(0,len(row)-1,1):
+            if row[i] == ".":
+                pass
+            else:
+                j = 1
+                while(i+j < 3 and row[i+j] == "."):
+                    j += 1
+                if row[i+j] != "." and row[i] == row[i+j]:
+                    row[i] = str(int(row[i]) + int(row[i+j]))
+                    row[i+j] = "."
+                else:
+                    k = 1
+                    while(i-k > 0 and row[i-k] == "."):
+                        row[i-1] = row[i]
+                        row[i] = "."
+                        k += 1
+        for iteration in range(3):
+            for i in range(3,-1,-1):
+                if row[i] == ".":
+                    pass
+                else:
+                    k = 1
+                    l = i
+                    while(l-k >= 0 and row[l-k] == "."):
+                        row[l-k] = row[l]
+                        row[l] = "."
+                        l -= 1
