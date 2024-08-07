@@ -82,3 +82,33 @@ def shift_left():
                         row[l-k] = row[l]
                         row[l] = "."
                         l -= 1
+            print("|")
+        print()
+
+    def check_game_over(self):
+        game_over = True
+        for i in range(4):
+            for j in range(4):
+                if self.board[i][j] == 0:
+                    game_over = False
+                    break
+                if j < 3 and self.board[i][j] == self.board[i][j + 1]:
+                    game_over = False
+                    break
+                if i < 3 and self.board[i][j] == self.board[i + 1][j]:
+                    game_over = False
+                    break
+        if game_over:
+            print("Game Overrr! your score is: {}".format(self.score))
+
+if __name__ == "__main__":
+    game = Game2048()
+    directions = {"w": "up", "s": "down", "a": "left", "d": "right"}
+    while True:
+        move = input("Enter move (w/s/a/d) or 'q' to quit: ").lower()
+        if move == "q":
+            break
+        if move in directions:
+            game.move(directions[move])
+        else:
+            print("Invalid input. Please enter w, s, a, or d.")
